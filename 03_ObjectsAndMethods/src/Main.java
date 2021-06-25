@@ -1,6 +1,7 @@
 public class Main {
 
     public static void main(String[] args) {
+        System.out.println("Basket TESTS\n------");
         Basket basket = new Basket();
         basket.add("Milk", 40);
         basket.print("Milk");
@@ -23,5 +24,34 @@ public class Main {
         System.out.println("Total price: " + basket2.getTotalPrice());
         System.out.println("Total weight: " + basket2.getTotalWeight());
         System.out.println();
+
+        System.out.println("Arithmetic TESTS\n------");
+        Arithmetic numbers = new Arithmetic(5, 8);
+        System.out.println(numbers.sum());
+        System.out.println(numbers.difference());
+        System.out.println(numbers.multiply());
+        System.out.println(numbers.max());
+        System.out.println(numbers.min());
+        System.out.println();
+
+        System.out.println("Printer TESTS\n------");
+        Printer printer = new Printer();
+        printer.append("just text");
+        printer.append("some text", "Document Title");
+        printer.append("another text", "Head Title", 5);
+        System.out.println("Documents in queue: " + printer.getDocumentsCount());
+        System.out.println("Pages in queue: " + printer.getPagesCount());
+        printer.print();
+        System.out.println("Documents in queue: " + printer.getDocumentsCount());
+        System.out.println("Pages in queue: " + printer.getPagesCount());
+        printer.totalPrintedPagesAndDocs();
+        printer.append("And he was running almost half of his life.", "Run Forest Run!",8);
+        System.out.println("Documents in queue: " + printer.getDocumentsCount());
+        System.out.println("Pages in queue: " + printer.getPagesCount());
+        printer.print();
+        System.out.println("Documents in queue: " + printer.getDocumentsCount());
+        System.out.println("Pages in queue: " + printer.getPagesCount());
+        printer.totalPrintedPagesAndDocs();
+
     }
 }
