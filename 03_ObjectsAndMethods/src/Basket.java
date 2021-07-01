@@ -1,6 +1,9 @@
 public class Basket {
 
     private static int count = 0;
+    private static int priceCount = 0;
+    private static int itemsCount = 0;
+
     private String items = "";
     private int totalPrice = 0;
     private int limit;
@@ -21,14 +24,40 @@ public class Basket {
         this();
         this.items = this.items + items;
         this.totalPrice = totalPrice;
+        increaseCount(totalPrice);
+        ++itemsCount;
     }
 
     public static int getCount() {
         return count;
     }
 
+    public static int getPriceCount() {
+        return priceCount;
+    }
+
+    public static int getItemsCount() {
+        return itemsCount;
+    }
+
     public static void increaseCount(int count) {
-        Basket.count = Basket.count + count;
+        Basket.count += count;
+    }
+
+    public static void increasePriceCount(int priceCount) {
+        Basket.priceCount += priceCount;
+    }
+
+    public static void increaseItemsCount(int itemsCount) {
+        Basket.itemsCount += itemsCount;
+    }
+
+    public static double totalAverageItemsPrice() {
+        return (double) Basket.priceCount / Basket.itemsCount;
+    }
+
+    public static double totalAverageBasketsPrice() {
+        return (double) Basket.priceCount / Basket.count;
     }
 
     public void add(String name, int price) {
@@ -45,13 +74,13 @@ public class Basket {
         totalWeight += weight * count;
     }
 
-    public void add(String name, int price, int count) {
+    public void add(String name, int price, int itemsCount) {
         boolean error = false;
         if (contains(name)) {
             error = true;
         }
 
-        if (totalPrice + count * price >= limit) {
+        if (totalPrice + itemsCount * price >= limit) {
             error = true;
         }
 
@@ -61,8 +90,10 @@ public class Basket {
         }
 
         items = items + "\n" + name + " - " +
-            count + " шт. - " + price;
-        totalPrice = totalPrice + count * price;
+            itemsCount + " шт. - " + price;
+        totalPrice += itemsCount * price;
+        increasePriceCount(itemsCount * price);
+        increaseItemsCount(itemsCount);
     }
 
     public void clear() {
