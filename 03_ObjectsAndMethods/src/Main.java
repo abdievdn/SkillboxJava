@@ -7,6 +7,16 @@ public class Main {
         showBasketInfo(basket, "Milk");
         showTotalBasketsInfo();
 
+        Basket basketA = new Basket("Toy Car", 65);
+        showBasketInfo(basketA, "A");
+        showTotalBasketsInfo();
+
+        Basket basketB = new Basket();
+        Basket basketC = new Basket(1000);
+        showBasketInfo(basketB, "B");
+        showBasketInfo(basketC, "C");
+        showTotalBasketsInfo();
+
         Basket basket1 = new Basket();
         basket1.add("Beer", 80, 500.00);
         basket1.add("Chips", 60, 300.00);

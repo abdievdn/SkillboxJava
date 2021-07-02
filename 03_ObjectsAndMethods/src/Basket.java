@@ -11,7 +11,7 @@ public class Basket {
 
     public Basket() {
         increaseCount(1);
-        items = "Список товаров:";
+        items = "Список товаров:\n";
         this.limit = 1000000;
     }
 
@@ -24,8 +24,8 @@ public class Basket {
         this();
         this.items = this.items + items;
         this.totalPrice = totalPrice;
-        increaseCount(totalPrice);
-        ++itemsCount;
+        increasePriceCount(totalPrice);
+        increaseItemsCount(1);
     }
 
     public static int getCount() {
