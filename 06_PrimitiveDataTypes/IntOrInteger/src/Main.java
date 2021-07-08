@@ -13,14 +13,13 @@ public class Main {
         charsCodes('Ё', 'Ё');
         charsCodes('а', 'я');
         charsCodes('ё', 'ё');
-        charsCodes('\uFFFF', '\uFFFF');
 
     }
 
     private static void charsCodes(char a, char b) {
         for(int i = 0; i < 65536; i++) {
             if((char) i == a) {
-                while((char) i != (char) ((int) b + 1)) {
+                while((char) i != (char) (b + 1)) {
                     System.out.println(i + " = " + (char) i);
                     i++;
                 }
