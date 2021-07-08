@@ -1,4 +1,3 @@
-import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -22,9 +21,7 @@ public class Main {
         контейнеров - 1 шт.
         */
 
-        int boxNumber = 0;
         int containers = 0;
-        int containerNumber = 0;
         int trucks = 0;
 
         if (totalBoxes > 0) {
