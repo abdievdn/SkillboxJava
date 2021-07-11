@@ -9,6 +9,24 @@ public class TwoDimensionalArray {
         // [ , X,  ]
         // [X,  , X]
 
-        return new char[0][0];
+        char[][] x = new char[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                x[i][j] = ' ';
+            }
+        }
+        for (int i = 0; i < size; i++) {
+            x[i][i] = 'X';
+            x[i][size - 1 - i] = 'X';
+        }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(x[i][j]);
+            }
+            System.out.println();
+        }
+
+        return x;
     }
 }

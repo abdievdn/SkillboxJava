@@ -22,13 +22,13 @@ public class Hospital {
         String patientsTemperatures = "";
 
         for (float element : temperatureData) {
-            patientsTemperatures += "\n" + String.format(Locale.US, "%.1f", element);
+            patientsTemperatures += String.format(Locale.US, "%.1f", element) + " ";
             temperaturesSum += element;
             if (element >= 36.2F && element <= 36.9F)
                 healthyPatientsCount++;
         }
         String report =
-                "Температуры пациентов: " + patientsTemperatures +
+                "Температуры пациентов: " + patientsTemperatures.trim() +
                         "\nСредняя температура: " + String.format(Locale.US, "%.2f", (temperaturesSum / temperatureData.length)) +
                         "\nКоличество здоровых: " + healthyPatientsCount;
 
