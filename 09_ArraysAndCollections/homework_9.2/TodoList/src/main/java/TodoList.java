@@ -16,7 +16,7 @@ public class TodoList {
         if (todoList.size() == 0 || index - todoList.size() == 1) {
             todoList.add(todo);
         }
-        else if (index < todoList.size() && index > 0) {
+        else if (index <= todoList.size() && index >= 0) {
             System.out.println("Добавлено дело \"" + todo + "\" по номеру \"" + index + "\"");
             todoList.add(index, todo);
         }

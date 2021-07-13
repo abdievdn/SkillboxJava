@@ -4,50 +4,69 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    private static TodoList todoList = new TodoList();
+    private static final TodoList todoList = new TodoList();
+    private static final Pattern pattern = Pattern.compile("(?<command>ADD|EDIT|DELETE|LIST|EXIT)(\\s(?<index>\\d+))?(\\s(?<text>.+))?");
 
     public static void main(String[] args) {
         // TODO: написать консольное приложение для работы со списком дел todoList
 
+        boolean isExit = false;
+
+
         System.out.println("Доступные команды: LIST, ADD, EXIT;\n и команды с указанием номера через пробел: ADD, EDIT, DELETE");
+        Scanner input = new Scanner(System.in);
         while (true) {
-            Scanner input = new Scanner(System.in);
             String line = input.nextLine();
-            String regex = "[A-Z]{3,}(\\s\\d)?";
-            Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(line);
-
             if (matcher.find()) {
-
-                if (line.substring(matcher.start(), matcher.end()).equals("LIST")) {
-                    for (int i = 0; i < todoList.getTodos().size(); i++) {
-                        System.out.println(i + " - " + todoList.getTodos().get(i));
-                    }
+                switch (matcher.group("command")) {
+                    case "EXIT":
+                        isExit = true;
+                        break;
+                    case "LIST":
+                        for (int i = 0; i < todoList.getTodos().size(); i++) {
+                            System.out.println(i + " - " + todoList.getTodos().get(i));
+                        }
+                        break;
+                    case "ADD":
+                        if (isEmptyText(matcher)) break;
+                        if (isIndexNull(matcher, false)) todoList.add(matcher.group("text").trim());
+                        else {
+                            int index = Integer.parseInt(matcher.group("index"));
+                            todoList.add(index, matcher.group("text").trim());
+                        }
+                        break;
+                    case "EDIT":
+                        if (isIndexNull(matcher, true) || isEmptyText(matcher)) break;
+                        int index = Integer.parseInt(matcher.group("index"));
+                        todoList.edit(matcher.group("text").trim(), index);
+                        break;
+                    case "DELETE":
+                        if (isIndexNull(matcher, true)) break;
+                        index = Integer.parseInt(matcher.group("index"));
+                        todoList.delete(index);
+                        break;
+                    default:
+                        break;
                 }
-
-                else if (line.substring(matcher.start(), matcher.end()).equals("EXIT")) break;
-
-                else if (line.substring((matcher.start()), matcher.end()).equals("ADD")) {
-                    todoList.add(line.substring(matcher.end(), line.length()).trim());
-                }
-
-                else if (line.substring((matcher.start()), matcher.end()).contains("ADD")) {
-                    int index = Integer.parseInt(line.substring(4, matcher.end()));
-                    todoList.add(index, line.substring(matcher.end(), line.length()).trim());
-                }
-
-                else if (line.substring((matcher.start()), matcher.end()).contains("EDIT")) {
-                    int index = Integer.parseInt(line.substring(5, matcher.end()));
-                    todoList.edit(line.substring(matcher.end(), line.length()).trim(), index);
-                }
-
-                else if (line.substring((matcher.start()), matcher.end()).contains("DELETE")) {
-                    int index = Integer.parseInt(line.substring(7, matcher.end()));
-                    todoList.delete(index);
-                }
-
-                else System.out.println("Неверная команда");
+                if (isExit) break;
             }
         }
+    }
+
+    private static boolean isEmptyText(Matcher matcher) {
+        if (matcher.group("text") == null) {
+            System.out.println("Введите информацию о деле");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isIndexNull(Matcher matcher, boolean isMessage) {
+        if (matcher.group("index") == null) {
+            if (isMessage == true) System.out.println("Не введен индекс");
+            return true;
+        }
+        return false;
     }
 }
