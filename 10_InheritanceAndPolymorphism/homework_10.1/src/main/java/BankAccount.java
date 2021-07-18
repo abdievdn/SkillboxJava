@@ -18,6 +18,11 @@ public class BankAccount {
   }
 
   public boolean send(BankAccount receiver, double amount) {
-    return (receiver.take(amount));
+    if (take(amount)) {
+      receiver.put(amount);
+      return true;
+    }
+    return false;
+
   }
 }
