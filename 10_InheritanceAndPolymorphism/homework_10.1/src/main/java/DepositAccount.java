@@ -13,7 +13,7 @@ public class DepositAccount extends BankAccount {
 
     @Override
     public boolean take(double amountToTake) {
-        if (ChronoUnit.MONTHS.between(lastIncome, LocalDate.now()) < 0) return false;
+        if (ChronoUnit.MONTHS.between(lastIncome, LocalDate.now()) < 1) return false;
         return super.take(amountToTake);
     }
 }
