@@ -1,15 +1,23 @@
 public class BankAccount {
 
+  private double amount;
+
   public double getAmount() {
-    //TODO: реализуйте метод и удалите todo
-    return 0;
+    return amount;
   }
 
   public void put(double amountToPut) {
-    //TODO: реализуйте метод и удалите todo
+    if (amountToPut < 0 ) return;
+    amount += amountToPut;
   }
 
-  public void take(double amountToTake) {
-    //TODO: реализуйте метод и удалите todo
+  public boolean take(double amountToTake) {
+    if (amount < amountToTake) return false;
+    amount -= amountToTake;
+    return true;
+  }
+
+  public boolean send(BankAccount receiver, double amount) {
+    return (receiver.take(amount));
   }
 }
