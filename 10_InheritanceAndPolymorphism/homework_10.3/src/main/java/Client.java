@@ -1,9 +1,18 @@
 public abstract class Client {
 
-    protected double amount;
+    private double amount;
 
-    public abstract double getAmount();
-    public abstract void put(double amountToPut);
-    public abstract void take(double amountToTake);
+    public double getAmount() {
+        return amount;
+    }
 
+    public void put(double amountToPut) {
+        if (amountToPut < 1) return;
+        amount += amountToPut;
+    }
+
+    public void take(double amountToTake) {
+        if (amount < amountToTake) return;
+        amount -= amountToTake;
+    }
 }
