@@ -53,23 +53,23 @@ public class Company {
         return sortSalaryStaff;
     }
 
-    private int errorStaffCount(int count) {
+    private boolean isErrorStaffCount(int count) {
         if (count < 0 || count > employeeList.size()) {
             System.out.println("Количество сотрудников превышает фактическое или меньше нуля!");;
-            count = 0;
+            return true;
         }
-        return count;
+        return false;
     }
 
     public List<Employee> getTopSalaryStaff(int count) {
-        count = errorStaffCount(count);
+        if (isErrorStaffCount(count)) count = 0;
         List<Employee> topSalaryStaff = getSortEmployees();
         Collections.reverse(topSalaryStaff);
         return topSalaryStaff.subList(0, count);
     }
 
     public List<Employee> getLowestSalaryStaff(int count) {
-        count = errorStaffCount(count);
+        if (isErrorStaffCount(count)) count = 0;
         List<Employee> lowestSalaryStaff = getSortEmployees();
         return lowestSalaryStaff.subList(0, count);
     }
