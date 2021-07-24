@@ -5,7 +5,7 @@ public class Company {
 
     private String name;
     private List<Employee> employeeList = new ArrayList<>();
-    private long income = 0;
+    private long income;
 
     public Company(String name) {
         this.name = name;
@@ -43,14 +43,11 @@ public class Company {
         return income;
     }
 
-    public void setIncome(long income) {
-        this.income += income;
-    }
-
-    private List<Employee> getSortEmployees() {
-        ArrayList<Employee> sortSalaryStaff = new ArrayList<>(employeeList);
-        Collections.sort(sortSalaryStaff, Comparator.comparingDouble(Employee::getMonthSalary));
-        return sortSalaryStaff;
+    public void setIncome() {
+        income = 0;
+        for(Employee e : employeeList) {
+            if (e instanceof Manager) income += ((Manager) e).getEarningsForCompany();
+        }
     }
 
     private boolean isErrorStaffCount(int count) {
@@ -63,15 +60,15 @@ public class Company {
 
     public List<Employee> getTopSalaryStaff(int count) {
         if (isErrorStaffCount(count)) count = 0;
-        List<Employee> topSalaryStaff = getSortEmployees();
-        Collections.reverse(topSalaryStaff);
+        List<Employee> topSalaryStaff = new ArrayList<>(employeeList);
+        topSalaryStaff.sort(Comparator.comparing(Employee::getMonthSalary).reversed());
         return topSalaryStaff.subList(0, count);
     }
 
     public List<Employee> getLowestSalaryStaff(int count) {
         if (isErrorStaffCount(count)) count = 0;
-        List<Employee> lowestSalaryStaff = getSortEmployees();
+        List<Employee> lowestSalaryStaff = new ArrayList<>(employeeList);
+        lowestSalaryStaff.sort(Comparator.comparing(Employee::getMonthSalary));
         return lowestSalaryStaff.subList(0, count);
     }
-
 }

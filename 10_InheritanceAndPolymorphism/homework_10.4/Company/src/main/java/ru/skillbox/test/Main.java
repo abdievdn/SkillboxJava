@@ -10,6 +10,7 @@ public class Main {
         company.hireAll(Operator.class, 60);
         company.hireAll(Manager.class, 80);
         company.hireAll(TopManager.class, 10);
+        company.setIncome();
         System.out.println("Доход компании: " + company.getIncome());
         System.out.println();
 
