@@ -49,12 +49,7 @@ public class Company {
 
     private List<Employee> getSortEmployees() {
         ArrayList<Employee> sortSalaryStaff = new ArrayList<>(employeeList);
-        Collections.sort(sortSalaryStaff, new Comparator<Employee>() {
-            @Override
-            public int compare(Employee o1, Employee o2) {
-                return Double.compare(o1.getMonthSalary(), o2.getMonthSalary());
-            }
-        });
+        Collections.sort(sortSalaryStaff, Comparator.comparingDouble(Employee::getMonthSalary));
         return sortSalaryStaff;
     }
 

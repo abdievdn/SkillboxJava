@@ -25,14 +25,10 @@ public class Main {
 
     private static void printTest(Company company) {
         System.out.println("Список зарплат по убыванию");
-        for (Employee employee : company.getTopSalaryStaff(15)) {
-            System.out.println(employee.getMonthSalary() + " руб.");
-        }
+        company.getTopSalaryStaff(15).forEach(e -> System.out.println(e.getMonthSalary() + " руб."));
         System.out.println();
         System.out.println("Список зарплат по возрастанию");
-        for (Employee employee : company.getLowestSalaryStaff(40)) {
-            System.out.println(employee.getMonthSalary() + " руб.");
-        }
+        company.getLowestSalaryStaff(40).forEach(e -> System.out.println(e.getMonthSalary() + " руб."));
         System.out.println();
     }
 }
