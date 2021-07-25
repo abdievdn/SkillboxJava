@@ -10,25 +10,25 @@ import java.util.stream.Collectors;
 
 
 public class Main {
+
+    public static final int TWO_HOURS = 1000 * 60 * 60 * 2;
+
     public static void main(String[] args) {
 
     }
 
     public static List<Flight> findPlanesLeavingInTheNextTwoHours(Airport airport) {
         //TODO Метод должден вернуть список рейсов вылетающих в ближайшие два часа.
-        List<Flight> nextTwoHoursFlights;
-        Date time = new Date();
-        int departureTime = time.getDate() + (1000 * 60 * 60 * 2);
 
-        nextTwoHoursFlights = airport.getTerminals()
+        Date timeNow = new Date();
+        int departureTime = timeNow.getDate() + TWO_HOURS;
+        return airport.getTerminals()
                 .stream()
                 .map(Terminal::getFlights)
                 .flatMap(Collection::stream)
                 .filter(flight -> flight.getType() == Flight.Type.DEPARTURE &&
-                      (flight.getDate().compareTo(time) >= 0 && flight.getDate().compareTo(time) <= departureTime))
+                       (flight.getDate().getTime() - timeNow.getTime() >= 0 && flight.getDate().getTime() - timeNow.getTime() <= departureTime))
                 .collect(Collectors.toList());
-
-        return nextTwoHoursFlights;
     }
 
 }
