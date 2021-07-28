@@ -1,22 +1,17 @@
 package ru.skillbox.main;
 
 public class EmployeeFactory  {
-/*    public EmployeeBase createEmployee(EmployeeType type) {
-        EmployeeBase employee = null;
-        Company company = null;
+    public static EmployeeBase createEmployee(Company company, EmployeeType type) {
 
         switch (type) {
             case OPERATOR:
-                employee = new Operator();
-                break;
+                return new Operator(company);
             case MANAGER:
-                employee = new Manager();
-                break;
+                return new Manager(company);
             case TOP_MANAGER:
-                employee = new TopManager();
-                break;
+                return new TopManager(company);
+            default:
+                throw new RuntimeException("Unknown EmployeeType");
         }
-
-        return employee;
-    }*/
+    }
 }

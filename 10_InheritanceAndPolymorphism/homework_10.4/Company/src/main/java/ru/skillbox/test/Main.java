@@ -7,10 +7,10 @@ public class Main {
     public static void main(String[] args) {
 
         Company company = new Company("Skyline");
-        company.hireAll(Operator.class, 60);
-        company.hireAll(Manager.class, 80);
-        company.hireAll(TopManager.class, 10);
+        company.hireAll(EmployeeType.OPERATOR, 100);
+        company.hireAll(EmployeeType.MANAGER, 80);
         company.setIncome();
+        company.hireAll(EmployeeType.TOP_MANAGER, 10);
         System.out.println("Доход компании: " + company.getIncome());
         System.out.println();
 
@@ -18,7 +18,7 @@ public class Main {
 
         int fireCount = company.getEmployeeList().size() / 2;
         for (int i = 0; i < fireCount; i++) {
-            company.fire(i);
+            company.fire(0);
         }
 
         printTest(company);

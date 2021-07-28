@@ -23,15 +23,13 @@ public class Company {
         return employeeList;
     }
 
-    public void hire(Employee employee) {
-        employeeList.add(employee);
+    public void hire(EmployeeType employeeType) {
+        employeeList.add(EmployeeFactory.createEmployee(this, employeeType));
     }
 
-    public void hireAll(Class employee, int employeeCount) {
+    public void hireAll(EmployeeType employeeType, int employeeCount) {
         for (int i = 0; i < employeeCount; i++) {
-            if (employee ==  Manager.class) employeeList.add(new Manager(this));
-            if (employee == TopManager.class) employeeList.add(new TopManager(this));
-            if (employee == Operator.class) employeeList.add(new Operator(this));
+            employeeList.add(EmployeeFactory.createEmployee(this, employeeType));
         }
     }
 
@@ -45,9 +43,11 @@ public class Company {
 
     public void setIncome() {
         income = 0;
-        for(Employee e : employeeList) {
-            if (e instanceof Manager) income += ((Manager) e).getEarningsForCompany();
-        }
+        income = employeeList
+            .stream()
+            .filter(e -> e instanceof Manager)
+            .map(e -> ((Manager) e).getEarningsForCompany())
+            .reduce((x, y) -> x + y).get();
     }
 
     private boolean isErrorStaffCount(int count) {
