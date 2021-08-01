@@ -5,23 +5,20 @@
         <File name="SearchFile" fileName="logs/search.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Filters>
-                <ThresholdFilter level="warn"  onMatch="DENY"   onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="error" onMatch="DENY"   onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="fatal" onMatch="DENY"   onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="SEARCH_INPUT"  onMatch="ACCEPT"   onMismatch="DENY"/>
             </Filters>
         </File>
 
-        <File name="ErrorsFile" fileName="logs/errors.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <File name="ErrorInputFile" fileName="logs/errors.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5levelERROR %logger{36} - %msg%n"/>
             <Filters>
-                <ThresholdFilter level="fatal" onMatch="DENY"   onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="ERROR_INPUT" onMatch="ACCEPT"   onMismatch="DENY"/>
             </Filters>
         </File>
 
         <File name="ExceptionsFile" fileName="logs/exceptions.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Filters>
-                <ThresholdFilter level="error" onMatch="DENY"   onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="fatal" onMatch="DENY"   onMismatch="NEUTRAL"/>
             </Filters>
         </File>
@@ -31,8 +28,8 @@
     <loggers>
         <root level="debug">
             <appender-ref ref="SearchFile" level="info"/>
-            <appender-ref ref="ErrorsFile" level="error"/>
-            <appender-ref ref="ExceptionsFile" level="warn"/>
+            <appender-ref ref="ErrorInputFile" level="info"/>
+            <appender-ref ref="ExceptionsFile" level="error"/>
         </root>
     </loggers>
 </configuration>
