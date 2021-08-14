@@ -5,87 +5,89 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MetroMapParse {
-    private Document doc;
 
-    public MetroMapParse(String url) {
+    public static void mapParse(String url) {
         saveJsonFile(parseHtmlMapToJson(url));
     }
 
-    private String parseHtmlMapToJson(String url) {
+    private static String parseHtmlMapToJson(String url) {
         JSONObject jsonMetroMap = new JSONObject();
-        JSONObject jsonLines = new JSONObject();
+        JSONObject jsonStationsInLines = new JSONObject();
         JSONArray jsonLinesNames = new JSONArray();
-//        JSONArray jsonConnections = new JSONArray();
+        JSONArray jsonAllConnections = new JSONArray();
+        Set<String> lineController = new TreeSet<>(); // control line for avoid connections duplicates
 
         try {
-            doc = Jsoup.connect(url).maxBodySize(0).get();
+            Document doc = Jsoup.connect(url).maxBodySize(0).get();
             Elements lines;
 
-            // stations in lines
-            lines = doc.select("div.js-metro-stations");
+            lines = doc.select("div.js-toggle-depend");
             lines.forEach(el -> {
                 JSONArray jsonStations = new JSONArray();
-                Elements stations = el.select("span.name");
-                stations.forEach(s -> jsonStations.add(s.text()));
-                jsonLines.put(el.attr("data-line"), jsonStations);
-            });
-            jsonMetroMap.put("stations", jsonLines);
+                String lineNumber = el.child(0).attr("data-line");
+                String lineName = el.select("span.js-metro-line").text();
+                lineController.add(lineNumber); // current line added
 
-            // lines number and name
-            lines = doc.select("span.js-metro-line");
-            lines.forEach(el -> {
-                String number = el.attr("data-line");
-                String name = el.text();
+                Elements stations = el.nextElementSibling().select("span.name");
+                stations.forEach(s -> {
+                    // add stations
+                    jsonStations.add(s.text());
+
+                    //add connections
+                    Element nextElement = s.nextElementSibling();
+                    if (nextElement == null) return;
+                    JSONArray jsonConnections = new JSONArray();
+                    JSONObject jsonMainConnect = new JSONObject();
+                    String stationName = s.text();
+                    jsonMainConnect.put("line", lineNumber);
+                    jsonMainConnect.put("station", stationName);
+                    jsonConnections.add(jsonMainConnect);
+                    while (nextElement != null) {
+                        JSONObject jsonConnect = new JSONObject();
+                        String connectStationLine = nextElement.className().split(" ")[1].replaceAll("\\w+-", "");
+
+                        for (String l : lineController)
+                            if (connectStationLine.equals(l)) return; // all connections already exists in previous line
+
+                        String connectStationName = nextElement.attr("title").split("«")[1].split("»")[0];
+                        jsonConnect.put("line", connectStationLine);
+                        jsonConnect.put("station", connectStationName);
+                        jsonConnections.add(jsonConnect);
+                        nextElement = nextElement.nextElementSibling();
+                    }
+                    jsonAllConnections.add(jsonConnections);
+                });
+
+                // add lines
+                jsonStationsInLines.put(el.nextElementSibling().child(1).attr("data-line"), jsonStations);
                 JSONObject jsonLine = new JSONObject();
-                jsonLine.put("number", number);
-                jsonLine.put("name", name);
+                jsonLine.put("number", lineNumber);
+                jsonLine.put("name", lineName);
                 jsonLinesNames.add(jsonLine);
             });
+
+            jsonMetroMap.put("stations", jsonStationsInLines);
             jsonMetroMap.put("lines", jsonLinesNames);
-
-//            // connections
-//            List<String> linesSet = new ArrayList<>();
-//            List<String> linesMatch = new ArrayList<>();
-//            lines = doc.select("div.js-metro-stations");
-//            lines.forEach(el -> {
-//                Elements connections = el.select("span.t-icon-metroln");
-//
-//                connections.forEach(c -> {
-//                    String connectMainStation;
-//                    String connectStations;
-//                    connectMainStation = el.attr("data-line") + ":" + el.selectFirst("span.name").text();
-//                    connectStations = c.className().replaceAll(".[^\\d]", "") + ':' +
-//                            c.attr("title").split(" ")[3].replaceAll("[«»]", "");
-//                    linesSet.add(connectMainStation + "_" + connectStations);
-//                });
-//
-//
-////                connections.forEach(c -> {
-////                    String connectLine;
-////                    connectLine = c.attr("title").replaceAll("(^«.»)", "");
-////                    jsonConnections.add(connectLine);
-//                });
-//            linesSet.forEach(System.out::println);
-////            jsonMetroMap.put("connections", jsonConnections);
-
-            }
-        catch (Exception e) {
+            jsonMetroMap.put("connections", jsonAllConnections);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(jsonMetroMap);
     }
 
-    private void saveJsonFile(String jsonMetroMap) {
-
+    private static void saveJsonFile(String jsonMetroMap) {
         try {
             FileWriter writer = new FileWriter("src/main/resources/map.json", false);
             writer.write(jsonMetroMap);
@@ -109,9 +111,11 @@ public class MetroMapParse {
                 stationsCount.addAndGet(stationsArray.size());
             });
             System.out.println("\nОбщее количество станций: " + stationsCount);
+
+            JSONArray connectionsArray = (JSONArray) jsonObject.get("connections");
+            System.out.println("Количество переходов: " + connectionsArray.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
