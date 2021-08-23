@@ -1,6 +1,4 @@
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,28 +11,30 @@ public class Subscription {
     @Getter
     @Setter
     @EmbeddedId
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key id;
 
     @Getter
     @Setter
+    @JoinColumn(name = "student_id", insertable = false, updatable = false)
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column(name = "student_id", insertable = false, updatable = false)
     private Student student;
 
     @Getter
     @Setter
+    @JoinColumn(name = "course_id", insertable = false, updatable = false)
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column(name = "course_id", insertable = false, updatable = false)
     private Course course;
 
     @Getter
     @Setter
+    @Column(name = "subscription_date")
     private Date subscriptionDate;
 
+    @NoArgsConstructor
+    @AllArgsConstructor
     @EqualsAndHashCode
     @Embeddable
-    public class Key implements Serializable {
+    public static class Key implements Serializable {
 
         @Getter
         @Setter
@@ -46,5 +46,4 @@ public class Subscription {
         @Column(name = "course_id")
         private int courseId;
     }
-
 }

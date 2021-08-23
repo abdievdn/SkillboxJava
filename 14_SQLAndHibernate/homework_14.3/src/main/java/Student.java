@@ -3,6 +3,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Students")
@@ -26,4 +27,10 @@ public class Student {
     @Setter
     @Column(name = "registration_date")
     private Date registrationDate;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
+    private List<Subscription> subscriptions;
 }
