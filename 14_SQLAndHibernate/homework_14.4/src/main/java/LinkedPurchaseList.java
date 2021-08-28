@@ -2,12 +2,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Subscriptions")
-public class Subscription {
+public class LinkedPurchaseList {
 
     @Getter
     @Setter
@@ -17,19 +14,14 @@ public class Subscription {
     @Getter
     @Setter
     @JoinColumn(name = "student_id", insertable = false, updatable = false)
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Student student;
+    @ManyToOne
+    private Student studentId;
 
     @Getter
     @Setter
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Course course;
-
-    @Getter
-    @Setter
-    @Column(name = "subscription_date")
-    private Date subscriptionDate;
+    @ManyToOne
+    private Course courseId;
 
     @NoArgsConstructor
     @AllArgsConstructor
@@ -59,4 +51,5 @@ public class Subscription {
             return Objects.hash(studentId, courseId);
         }
     }
+
 }
