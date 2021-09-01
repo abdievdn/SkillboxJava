@@ -5,10 +5,8 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class Main {
@@ -27,7 +25,6 @@ public class Main {
             List<Course> courseList = session.createQuery("From Course").getResultList();
             session.createQuery("From LinkedPurchaseList");
 
-
             for (PurchaseList p : purchaseList) {
                 int studentId = studentList
                         .stream()
@@ -43,14 +40,11 @@ public class Main {
                         .findAny()
                         .get()
                         .getId();
-                System.out.println(studentId + " " + courseId);
+
+                LinkedPurchaseList linkedPurchaseList =
+                        new LinkedPurchaseList(new LinkedPurchaseList.Key(studentId, courseId), studentId, courseId);
+                session.save(linkedPurchaseList);
             }
-
-//            studentList.forEach(student -> System.out.println(student.getId()));
-//            purchaseLists.forEach(p -> System.out.println(p.getStudentName()));
-
-
-
             transaction.commit();
         }
     }

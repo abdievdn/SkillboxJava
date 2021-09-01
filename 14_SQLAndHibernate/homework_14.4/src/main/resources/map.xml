@@ -1,0 +1,13 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN">
+<hibernate-mapping>
+    <class schema="skillbox" table="linked_purchaselist" name="LinkedPurchaseList">
+        <id name="courseId">
+            <column name="course_id" sql-type="int unsigned AUTO_INCREMENT"/>
+        </id>
+        <id name="studentId">
+            <column name="student_id" sql-type="int unsigned AUTO_INCREMENT"/>
+        </id>
+    </class>
+</hibernate-mapping>

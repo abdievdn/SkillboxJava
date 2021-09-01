@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name = "linked_purchaselist")
+@NoArgsConstructor
+@AllArgsConstructor
 public class LinkedPurchaseList {
 
     @Getter
@@ -13,15 +17,13 @@ public class LinkedPurchaseList {
 
     @Getter
     @Setter
-    @JoinColumn(name = "student_id", insertable = false, updatable = false)
-    @ManyToOne
-    private Student studentId;
+    @Column(name = "student_id", insertable = false, updatable = false)
+    private int studentId;
 
     @Getter
     @Setter
-    @JoinColumn(name = "course_id", insertable = false, updatable = false)
-    @ManyToOne
-    private Course courseId;
+    @Column(name = "course_id", insertable = false, updatable = false)
+    private int courseId;
 
     @NoArgsConstructor
     @AllArgsConstructor
