@@ -14,7 +14,6 @@ public class Main {
     }
 
     public static void sortBySalaryAndAlphabet(List<Employee> staff) {
-        ArrayList<Employee> sortedStaff = new ArrayList<>(staff);
         Collections.sort(staff, ((o1, o2) -> o1.getName().compareTo(o2.getName())));
         Collections.sort(staff, ((o1, o2) -> o1.getSalary().compareTo(o2.getSalary())));
         for (Employee employee : staff) {
