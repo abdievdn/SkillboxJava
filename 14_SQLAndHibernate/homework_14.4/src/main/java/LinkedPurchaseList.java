@@ -17,13 +17,15 @@ public class LinkedPurchaseList {
 
     @Getter
     @Setter
-    @Column(name = "student_id", insertable = false, updatable = false)
-    private int studentId;
+    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Student studentId;
 
     @Getter
     @Setter
-    @Column(name = "course_id", insertable = false, updatable = false)
-    private int courseId;
+    @JoinColumn(name = "course_id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Course courseId;
 
     @NoArgsConstructor
     @AllArgsConstructor

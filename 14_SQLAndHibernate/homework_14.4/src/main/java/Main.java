@@ -23,26 +23,25 @@ public class Main {
             List<PurchaseList> purchaseList = session.createQuery("From PurchaseList").getResultList();
             List<Student> studentList = session.createQuery("From Student").getResultList();
             List<Course> courseList = session.createQuery("From Course").getResultList();
-            session.createQuery("From LinkedPurchaseList");
+//            session.createQuery("From LinkedPurchaseList");
 
             for (PurchaseList p : purchaseList) {
-                int studentId = studentList
+                Student studentId = studentList
                         .stream()
                         .filter(student -> student.getName()
                                 .equals(p.getStudentName()))
                         .findAny()
-                        .get()
-                        .getId();
-                int courseId = courseList
+                        .get();
+                Course courseId = courseList
                         .stream()
                         .filter(course -> course.getName()
                                 .equals(p.getCourseName()))
                         .findAny()
-                        .get()
-                        .getId();
+                        .get();
 
                 LinkedPurchaseList linkedPurchaseList =
-                        new LinkedPurchaseList(new LinkedPurchaseList.Key(studentId, courseId), studentId, courseId);
+                        new LinkedPurchaseList(new LinkedPurchaseList.Key(studentId.getId(), courseId.getId()),
+                                studentId, courseId);
                 session.save(linkedPurchaseList);
             }
             transaction.commit();

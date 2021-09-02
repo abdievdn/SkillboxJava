@@ -3,11 +3,11 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN">
 <hibernate-mapping>
     <class schema="skillbox" table="linked_purchaselist" name="LinkedPurchaseList">
-        <id name="courseId">
+        <many-to-one name="courseId">
             <column name="course_id" sql-type="int unsigned AUTO_INCREMENT"/>
-        </id>
-        <id name="studentId">
+        </many-to-one>
+        <many-to-one name="studentId">
             <column name="student_id" sql-type="int unsigned AUTO_INCREMENT"/>
-        </id>
+        </many-to-one>
     </class>
 </hibernate-mapping>
