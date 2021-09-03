@@ -20,30 +20,25 @@ public class Main {
              Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            List<PurchaseList> purchaseList = session.createQuery("From PurchaseList").getResultList();
-            List<Student> studentList = session.createQuery("From Student").getResultList();
-            List<Course> courseList = session.createQuery("From Course").getResultList();
-//            session.createQuery("From LinkedPurchaseList");
+            String hql = "select new " + StudentCourseIds.class.getName() + "(s.id, c.id) "
+                    + "from " + PurchaseList.class.getSimpleName() + " p "
+                    + ", " + Student.class.getSimpleName() + " s "
+                    + ", " + Course.class.getSimpleName() + " c "
+                    + "where p.studentName = s.name "
+                    + "and p.courseName = c.name ";
 
-            for (PurchaseList p : purchaseList) {
-                Student studentId = studentList
-                        .stream()
-                        .filter(student -> student.getName()
-                                .equals(p.getStudentName()))
-                        .findAny()
-                        .get();
-                Course courseId = courseList
-                        .stream()
-                        .filter(course -> course.getName()
-                                .equals(p.getCourseName()))
-                        .findAny()
-                        .get();
+            List<StudentCourseIds> studentCourseIds = session.createQuery(hql).getResultList();
 
+            studentCourseIds.forEach(id -> {
                 LinkedPurchaseList linkedPurchaseList =
-                        new LinkedPurchaseList(new LinkedPurchaseList.Key(studentId.getId(), courseId.getId()),
-                                studentId, courseId);
+                        new LinkedPurchaseList(new LinkedPurchaseList.Key(id.getStudentId(), id.getCourseId()),
+                                session.get(Student.class, id.getStudentId()),
+                                session.get(Course.class, id.getCourseId()));
                 session.save(linkedPurchaseList);
-            }
+            });
+
+
+
             transaction.commit();
         }
     }
