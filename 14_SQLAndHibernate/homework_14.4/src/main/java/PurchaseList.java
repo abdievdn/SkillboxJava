@@ -42,24 +42,24 @@ public class PurchaseList {
         @Getter
         @Setter
         @Column(name = "student_name")
-        private String studentId;
+        private String studentName;
 
         @Getter
         @Setter
         @Column(name = "course_name")
-        private String courseId;
+        private String courseName;
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Key key = (Key) o;
-            return Objects.equals(studentId, key.studentId) && Objects.equals(courseId, key.courseId);
+            return Objects.equals(studentName, key.studentName) && Objects.equals(courseName, key.courseName);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(studentId, courseId);
+            return Objects.hash(studentName, courseName);
         }
     }
 }

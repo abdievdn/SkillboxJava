@@ -15,6 +15,10 @@ public class LinkedPurchaseList {
     @EmbeddedId
     private Key id;
 
+    public LinkedPurchaseList(Key id) {
+        this.id = id;
+    }
+
     @Getter
     @Setter
     @JoinColumn(name = "student_id", insertable = false, updatable = false)
