@@ -7,7 +7,7 @@ public class Main {
     public static int CORES = Runtime.getRuntime().availableProcessors();
 
     public static void main(String[] args) {
-        long start = System.currentTimeMillis();
+        System.out.println("Обнаружено ядер: " + CORES);
 
         String srcFolder = "C:/users/kainart/Desktop/src";
         String dstFolder = "C:/users/kainart/Desktop/dst";
@@ -15,15 +15,18 @@ public class Main {
         File srcDir = new File(srcFolder);
         File[] files = srcDir.listFiles();
         int newWidth = 300;
-        int filesLength = files.length / CORES;
+        int filesLength = files.length;
+        int threadLength;
+        int srcPos = 0;
 
-        System.out.println("Обнаружено ядер: " + CORES);
-
-        for (int i = 0; i < CORES; i++) {
-            File[] filesInThread = new File[filesLength];
-            System.arraycopy(files, i * filesLength, filesInThread, 0, i * filesLength + filesLength);
+        for (int i = CORES; i > 0; i--) {
+            threadLength = filesLength / i;
+            File[] filesInThread = new File[threadLength];
+            System.arraycopy(files, srcPos, filesInThread, 0, threadLength);
             ImageResizer resizer = new ImageResizer(filesInThread, dstFolder, newWidth);
             new Thread(resizer).start();
+            filesLength = filesLength - threadLength;
+            srcPos = srcPos + threadLength;
         }
     }
 }
