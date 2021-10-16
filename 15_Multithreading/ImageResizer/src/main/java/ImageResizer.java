@@ -1,5 +1,8 @@
+import org.imgscalr.Scalr;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.File;
 
 public class ImageResizer implements Runnable {
@@ -7,11 +10,18 @@ public class ImageResizer implements Runnable {
     private String dstFolder;
     private File[] files;
     private int newWidth;
+    private int newHeight;
+
+
 
     public ImageResizer(File[] files, String dstFolder, int newWidth) {
         this.dstFolder = dstFolder;
         this.files = files;
         this.newWidth = newWidth;
+    }
+
+    public static BufferedImage resize(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        return Scalr.resize(originalImage, targetWidth, targetHeight);
     }
 
     @Override
@@ -23,7 +33,7 @@ public class ImageResizer implements Runnable {
                     continue;
                 }
 
-                int newHeight = (int) Math.round(
+/*                int newHeight = (int) Math.round(
                         image.getHeight() / (image.getWidth() / (double) newWidth)
                 );
                 BufferedImage newImage = new BufferedImage(
@@ -38,7 +48,10 @@ public class ImageResizer implements Runnable {
                         int rgb = image.getRGB(x * widthStep, y * heightStep);
                         newImage.setRGB(x, y, rgb);
                     }
-                }
+                }*/
+
+                newHeight = (int) Math.round(image.getHeight() / (image.getWidth() / (double) newWidth));
+                BufferedImage newImage = resize(image, newWidth, newHeight);
 
                 File newFile = new File(dstFolder + "/" + file.getName());
                 ImageIO.write(newImage, "jpg", newFile);

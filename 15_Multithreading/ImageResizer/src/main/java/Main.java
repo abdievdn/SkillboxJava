@@ -1,5 +1,3 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Main {
@@ -9,8 +7,13 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Обнаружено ядер: " + CORES);
 
-        String srcFolder = "C:/users/kainart/Desktop/src";
-        String dstFolder = "C:/users/kainart/Desktop/dst";
+        String srcFolder = "img/src";
+        String dstFolder = "img/dst";
+
+        File folder = new File(dstFolder);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
 
         File srcDir = new File(srcFolder);
         File[] files = srcDir.listFiles();
