@@ -22,14 +22,36 @@ public class Main {
         int threadLength;
         int srcPos = 0;
 
+        Thread[] threads = new Thread[CORES];
+
         for (int i = CORES; i > 0; i--) {
             threadLength = filesLength / i;
             File[] filesInThread = new File[threadLength];
             System.arraycopy(files, srcPos, filesInThread, 0, threadLength);
             ImageResizer resizer = new ImageResizer(filesInThread, dstFolder, newWidth);
-            new Thread(resizer).start();
+
+            // added files in threads dimension
+            threads[Math.abs(i - CORES)] = new Thread(resizer, "Thread-" + String.valueOf(Math.abs(i - CORES) + 1));
+
             filesLength = filesLength - threadLength;
             srcPos = srcPos + threadLength;
         }
+
+        long start = System.currentTimeMillis();
+
+        for (Thread thread: threads) {
+            thread.start();
+            System.out.println(thread.getName() + " start");
+        }
+        for (Thread thread: threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(thread.getName() + " join");
+        }
+
+        System.out.println("All Threads finished in " + (System.currentTimeMillis() - start) + " ms");
     }
 }
