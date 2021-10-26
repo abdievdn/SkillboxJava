@@ -1,4 +1,7 @@
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -22,7 +25,9 @@ public class Main {
         int threadLength;
         int srcPos = 0;
 
-        Thread[] threads = new Thread[CORES];
+//        Thread[] threads = new Thread[CORES];
+
+        ExecutorService executor = Executors.newFixedThreadPool(CORES);
 
         for (int i = CORES; i > 0; i--) {
             threadLength = filesLength / i;
@@ -30,14 +35,23 @@ public class Main {
             System.arraycopy(files, srcPos, filesInThread, 0, threadLength);
             ImageResizer resizer = new ImageResizer(filesInThread, dstFolder, newWidth);
 
-            // added files in threads dimension
-            threads[Math.abs(i - CORES)] = new Thread(resizer, "Thread-" + String.valueOf(Math.abs(i - CORES) + 1));
+/*            // added files in threads dimension
+            threads[Math.abs(i - CORES)] = new Thread(resizer, "Thread-" + String.valueOf(Math.abs(i - CORES) + 1));*/
+
+            executor.execute(resizer);
 
             filesLength = filesLength - threadLength;
             srcPos = srcPos + threadLength;
         }
 
-        long start = System.currentTimeMillis();
+        executor.shutdown();
+        try {
+            System.out.println(executor.awaitTermination(1, TimeUnit.MINUTES));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+/*        long start = System.currentTimeMillis();
 
         for (Thread thread: threads) {
             thread.start();
@@ -52,6 +66,6 @@ public class Main {
             System.out.println(thread.getName() + " join");
         }
 
-        System.out.println("All Threads finished in " + (System.currentTimeMillis() - start) + " ms");
+        System.out.println("All Threads finished in " + (System.currentTimeMillis() - start) + " ms");*/
     }
 }
