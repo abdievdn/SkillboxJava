@@ -1,13 +1,13 @@
 package main.java;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Bank {
 
-    private Map<String, Account> accounts;
+    public static final int AMOUNT_FOR_CHECK = 50000;
+    private final Map<String, Account> accounts;
     private final Random random = new Random();
 
     public final DecimalFormat NUMBER_FORMAT = new DecimalFormat( "###,###" );
@@ -29,14 +29,14 @@ public class Bank {
      * усмотрение)
      */
     public void transfer(String fromAccountNum, String toAccountNum, long amount) {
+
         Account from = getAccountValue(fromAccountNum);
         Account to = getAccountValue(toAccountNum);
-
-        synchronized (from) {
-            if ((from != null && to != null) && (from != to) && (from.getMoney() >= amount)) {
+        if ((from != null && to != null) && (from != to)) {
+            synchronized (from.compareTo(to) > 0 ? from : this) {
                 if (!from.isBlock() && !to.isBlock()) {
                     try {
-                        if (amount > 50000 && isFraud(fromAccountNum, toAccountNum, amount)) {
+                        if (amount > AMOUNT_FOR_CHECK && isFraud(fromAccountNum, toAccountNum, amount)) {
                             from.setBlock(true);
                             to.setBlock(true);
                             System.out.println("Transfer from " + fromAccountNum + " to " + toAccountNum
@@ -47,6 +47,7 @@ public class Bank {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    if (from.getMoney() < amount) return;
                     from.setMoney(getBalance(fromAccountNum) - amount);
                     to.setMoney(getBalance(toAccountNum) + amount);
                     System.out.println("Transfer from " + fromAccountNum + " to " + toAccountNum
@@ -55,13 +56,17 @@ public class Bank {
                             + NUMBER_FORMAT.format(getBalance(String.valueOf(fromAccountNum)))
                             + "\nBalance for account " + toAccountNum + " is: "
                             + NUMBER_FORMAT.format(getBalance(String.valueOf(toAccountNum))) + '\n');
-                } else {
-                    System.out.println("Account " + fromAccountNum + " blocked: " + from.isBlock()
-                            + ". Account " + toAccountNum + " blocked: " + to.isBlock()
-                            + ".\nTransaction canceled!\n");
+                }
+                else {
+                    System.out.println("Transaction with blocked account(s).\n"
+                            + "From " + fromAccountNum + " (block status: " + from.isBlock() + ")"
+                            + " to " + toAccountNum + " (block status: " + to.isBlock() + ")"
+                            + " with amount " + amount
+                            + "\nTransaction canceled!\n");
                 }
             }
         }
+
     }
 
     /**
@@ -85,7 +90,9 @@ public class Bank {
                 .entrySet()
                 .parallelStream()
                 .filter(acc -> acc.getValue().getAccNumber().equals(accountNum))
-                .findFirst()
-                .get().getValue();
+                .findAny()
+                .get()
+                .getValue();
     }
+
 }

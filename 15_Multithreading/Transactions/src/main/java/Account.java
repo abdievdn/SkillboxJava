@@ -1,10 +1,10 @@
 package main.java;
 
-public class Account {
+public class Account implements Comparable<Account> {
 
     private volatile long money;
     private String accNumber;
-    private boolean block;
+    private volatile boolean block;
 
     public Account(String accNumber, long money) {
         this.accNumber = accNumber;
@@ -34,5 +34,10 @@ public class Account {
 
     public void setBlock(boolean block) {
         this.block = block;
+    }
+
+    @Override
+    public int compareTo(Account o) {
+        return this.getAccNumber().compareTo(o.getAccNumber());
     }
 }
