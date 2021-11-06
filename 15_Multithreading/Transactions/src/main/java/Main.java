@@ -1,9 +1,6 @@
 package main.java;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.util.*;
 
 public class Main {
 
@@ -26,7 +23,7 @@ public class Main {
 
         System.out.println("Total bank cash: " + bank.NUMBER_FORMAT.format(bank.getSumAllAccounts()) + '\n');
 
-        Vector<Thread> threads = new Vector<>();
+        ArrayList<Thread> threads = new ArrayList<>();
 
         for (int i = 0; i < NUMBER_OF_THREADS; i++) {
                 int from = randomNumber(MIN_ACC_NUMBER, MAX_ACC_NUMBER);
@@ -53,7 +50,6 @@ public class Main {
                 });
         System.out.println("=======================================\nTotal bank cash: " + bank.NUMBER_FORMAT.format(bank.getSumAllAccounts()));
     }
-
 
 
     private static int randomNumber(int min, int max) {

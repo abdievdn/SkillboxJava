@@ -2,9 +2,9 @@ package main.java;
 
 public class Account implements Comparable<Account> {
 
-    private volatile long money;
+    private long money;
     private String accNumber;
-    private volatile boolean block;
+    private boolean block;
 
     public Account(String accNumber, long money) {
         this.accNumber = accNumber;
