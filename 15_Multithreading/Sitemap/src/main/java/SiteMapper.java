@@ -6,7 +6,7 @@ import java.util.concurrent.RecursiveTask;
 public class SiteMapper extends RecursiveTask<TreeSet<String>> {
 
     private String url;
-    private static TreeSet<String> siteMap = new TreeSet();
+    private static final TreeSet<String> siteMap = new TreeSet();
 
     public SiteMapper(String url) {
         this.url = url;
@@ -14,13 +14,13 @@ public class SiteMapper extends RecursiveTask<TreeSet<String>> {
     }
 
     @Override
-    protected TreeSet compute() {
+    protected TreeSet<String> compute() {
 
         List<SiteMapper> taskList = new ArrayList<>();
 
         try {
             siteMap.forEach(link -> {
-                if (url != link) {
+                if (!url.equals(link)) {
                     siteMap.add(url);
                     System.out.println("Added " + url);
                     try {
@@ -34,10 +34,10 @@ public class SiteMapper extends RecursiveTask<TreeSet<String>> {
                         task.fork();
                         taskList.add(task);
                     });
-                    taskList.forEach(SiteMapper::join);
                 }
                 System.out.println("Skipped " + url);
             });
+            taskList.forEach(SiteMapper::join);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

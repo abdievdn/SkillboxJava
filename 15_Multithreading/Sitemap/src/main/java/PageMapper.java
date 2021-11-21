@@ -27,7 +27,7 @@ public class PageMapper {
                 if (!link.contains(".pdf")
                         && !link.contains(".jpg")
                         && !link.contains(".png")
-                        && !link.contains("?")) {
+                        && !link.contains("=")) {
                     if (link.contains(url))
                         links.add(link);
                     if (link.matches("/.*") && !url.contains(link))
