@@ -8,9 +8,11 @@ import java.util.*;
 public class PageMapper {
 
     private final String url;
+    private static String baseURL;
     private final TreeSet<String> links = new TreeSet<>();
 
     public PageMapper(String url) {
+        if (baseURL == null) baseURL = url;
         this.url = url;
         this.pageMapping();
     }
@@ -20,7 +22,6 @@ public class PageMapper {
         try {
             Document doc = Jsoup.connect(url).maxBodySize(0).get();
             Elements urls;
-
             urls = doc.select("a");
             urls.forEach(el -> {
                 String link = el.attr("href");
@@ -28,10 +29,12 @@ public class PageMapper {
                         && !link.contains(".jpg")
                         && !link.contains(".png")
                         && !link.contains("=")) {
-                    if (link.contains(url))
-                        links.add(link);
-                    if (link.matches("/.*") && !url.contains(link))
-                        links.add(url + link.substring(1));
+//                    if (link.contains(url))
+//                        links.add(link);
+                    if (link.contains(baseURL))
+                        links.add((link.replace(baseURL, "")));
+                    if (link.matches("/.+"))
+                        links.add(link.substring(1));
                 }
             });
         } catch (IOException e) {

@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
 
 //        PageMapper lenta = new PageMapper("https://lenta.ru");
-        SiteMapper lenta = new SiteMapper("https://skillbox.ru/");
-        TreeSet<String> siteMap = new ForkJoinPool().invoke(lenta);
-        saveToFile("map.txt", siteMap);
+        SiteMapper lenta = new SiteMapper("https://lenta.ru/");
+        new ForkJoinPool().invoke(lenta);
+        saveToFile("map.txt", lenta.getSiteMap());
         System.out.println("Completed!");
     }
 
