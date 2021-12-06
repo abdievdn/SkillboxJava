@@ -28,9 +28,9 @@ public class TodoController {
         return Storage.addTodo(todo);
     }
 
-    @DeleteMapping("/todolist/")
-    public void delete(int number) {
-
+    @DeleteMapping("/todolist/{number}")
+    public void delete(@PathVariable int number) {
+        Storage.deleteTodo(number);
     }
 
 }

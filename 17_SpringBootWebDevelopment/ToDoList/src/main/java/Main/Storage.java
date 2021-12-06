@@ -28,4 +28,8 @@ public class Storage {
         caseList.addAll(todoList.values());
         return caseList;
     }
+
+    public static void deleteTodo(int number) {
+        todoList.remove(number);
+    }
 }

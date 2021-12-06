@@ -1,9 +1,10 @@
 $(function(){
 
     const appendTodo = function(data){
-        let todoCode = data.number + '. <a href="#" class="todo-link" data-number="' + data.number + '">' + data.name + '</a>';
+        let todoCode = '<h3 data-id="' + data.number + '">' + data.number + '. ' + data.name + '</h3>' + data.note + '<p><button' +
+            ' id="delete-todo">Delete</button></p><hr>';
         $('#todo-list')
-            .append('<div>' + todoCode + '</div>');
+            .append('<div style="case">' + todoCode + '</div>');
     };
 
     //Output todolist on load page
@@ -26,39 +27,6 @@ $(function(){
         }
     });
 
-    //Show delete todo form
-    $('#show-delete-todo-form').click(function(){
-        $('#todo-delete-form').css('display', 'flex');
-    });
-
-    //Closing delete todo form
-    $('#todo-delete-form').click(function(event){
-        if(event.target === this) {
-            $(this).css('display', 'none');
-        }
-    });
-
-    //Getting todo
-    $(document).on('click', '.todo-link', function () {
-        let link = $(this);
-        let todoNumber = link.data('number');
-        $.ajax({
-            method: "GET",
-            url: '/todolist/' + todoNumber,
-            success: function(response)
-            {
-                let code = '<span> Note: ' + response.note + '</span>';
-                link.parent().append(code);
-            },
-            error: function (response) {
-                if (response.status == 404) {
-                    alert('The case not found!');
-                }
-            }
-        });
-        return false;
-    });
-
     //Adding todo
     $('#save-todo').click(function()
     {
@@ -77,6 +45,27 @@ $(function(){
                     todo[dataArray[i]['name']] = dataArray[i]['value'];
                 }
                 appendTodo(todo);
+            }
+        });
+        return false;
+    });
+
+    //Deleting todo
+    $('#delete-todo').click(function()
+    {
+        let link = $(this);
+        let todoNumber = link.data('number');
+        $.ajax({
+            method: "DELETE",
+            url: '/todolist/' + todoNumber,
+            success: function()
+            {
+                location.reload();
+            },
+            error: function (response) {
+                if (response.status == 404) {
+                    alert('The case not found!');
+                }
             }
         });
         return false;
