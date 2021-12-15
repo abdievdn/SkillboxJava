@@ -2,6 +2,7 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Storage {
 
@@ -20,7 +21,6 @@ public class Storage {
             return todoList.get(todoNumber);
         }
         return null;
-
     }
 
     public static ArrayList<Todo> getTodoList() {
@@ -31,5 +31,22 @@ public class Storage {
 
     public static void deleteTodo(int number) {
         todoList.remove(number);
+        //refreshing todoList
+        int todoListSize = todoList.size();
+        for (int i = number; i < todoListSize + 1; i++) {
+            todoList.put(i, todoList.get(i + 1));
+            todoList.get(i + 1).setNumber(i);
+            try {
+                todoList.remove(i + 1);
+            }
+            catch (Exception e) {
+            }
+        }
+        currentNumber--;
     }
+
+    public static void editTodo(int number,Todo todo) {
+        todoList.replace(number, todo);
+    }
+
 }

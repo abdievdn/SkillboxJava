@@ -14,14 +14,14 @@ public class TodoController {
         return Storage.getTodoList();
     }
 
-    @GetMapping("/todolist/{number}")
-    public ResponseEntity get(@PathVariable int number) {
-        Todo todo = Storage.getTodo(number);
-        if (todo == null ) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return new ResponseEntity(todo, HttpStatus.OK);
-    }
+//    @GetMapping("/todolist/{number}")
+//    public ResponseEntity get(@PathVariable int number) {
+//        Todo todo = Storage.getTodo(number);
+//        if (todo == null ) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//        return new ResponseEntity(todo, HttpStatus.OK);
+//    }
 
     @RequestMapping("/todolist/")
     public synchronized int add(Todo todo) {
@@ -29,8 +29,12 @@ public class TodoController {
     }
 
     @DeleteMapping("/todolist/{number}")
-    public void delete(@PathVariable int number) {
+    public synchronized void delete(@PathVariable int number) {
         Storage.deleteTodo(number);
     }
 
+    @PutMapping("/todolist/{number}")
+    public synchronized void edit(@PathVariable int number, Todo todo) {
+        Storage.editTodo(number, todo);
+    }
 }
