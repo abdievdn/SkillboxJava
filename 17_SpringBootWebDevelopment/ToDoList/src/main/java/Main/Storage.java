@@ -2,12 +2,13 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Storage {
 
     private static int currentNumber = 1;
-    private static TreeMap<Integer, Todo> todoList = new TreeMap<>();
+    private static ConcurrentHashMap<Integer, Todo> todoList = new ConcurrentHashMap<>();
 
     public static int addTodo(Todo todo) {
         int number = currentNumber++;
