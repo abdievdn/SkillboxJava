@@ -3,7 +3,7 @@ $(function(){
     const appendTodo = function(data){
         let todoCode = '<h3>' + data.number + '. ' + data.name + '</h3>' + data.note +
             '<p><button class="delete-todo" data-number="' + data.number + '">Delete</button>&nbsp;' +
-            '<button id="show-edit-todo-form" data-number="' + data.number + '">Edit</button></p><hr>';
+            '<button class="get-todo" data-number="' + data.number + '">Get</button></p><hr>';
         $('#todo-list')
             .append('<div class="case">' + todoCode + '</div>');
     };
@@ -11,7 +11,7 @@ $(function(){
     //Output todolist on load page
    $.get('/todolist/', function(response)
    {
-       for(i in response) {
+       for(let i in response) {
            appendTodo(response[i]);
        }
    });
@@ -42,7 +42,7 @@ $(function(){
                 let todo = {};
                 todo.number = response;
                 let dataArray = $('#todo-form form').serializeArray();
-                for(i in dataArray) {
+                for(let i in dataArray) {
                     todo[dataArray[i]['name']] = dataArray[i]['value'];
                 }
                 appendTodo(todo);
@@ -52,35 +52,54 @@ $(function(){
         return false;
     });
 
-    // Show edit todo form
-    $('#show-edit-todo-form').click(function(){
-        $('#todo-form').css('display', 'flex');
+    //Getting todo
+    $(document).on('click', '.get-todo', function(){
+        let getButton = $(this);
+        let todoNumber = getButton.data('number');
+        $.ajax({
+            method: "GET",
+            url: '/todolist/' + todoNumber,
+            success: function(response)
+            {
+                $('#get-todo-form').css('display', 'flex');
+                $('#edit-number').val(response.number);
+                $('#edit-name').val(response.name);
+                $('#edit-note').val(response.note);
+            },
+            error: function(response)
+            {
+                if(response.status == 404) {
+                    alert('Case not found!');
+                }
+            }
+        });
+        return false;
     });
 
-    //Edit todo
+    //Closing get todo form
+    $('#get-todo-form').click(function(event){
+        if(event.target === this) {
+            $(this).css('display', 'none');
+        }
+    });
+
     $('#edit-todo').click(function()
     {
-        let data = $('#todo-form form').serialize();
         let editButton = $(this);
-        let todoNumber = editButton.data('number');
+        let todoNumber = editButton.name('number');
         $.ajax({
             method: "PUT",
             url: '/todolist/' + todoNumber,
-            data: data,
-            success: function(response)
+            success: function()
             {
-                $('#todo-form').css('display', 'none');
+                $('#get-todo-form').css('display', 'none');
                 let todo = {};
-                todo.number = response;
-                let dataArray = $('#todo-form form').serializeArray();
-                for(i in dataArray) {
+                let dataArray = $('#get-todo-form form').serializeArray();
+                for(let i in dataArray) {
                     todo[dataArray[i]['name']] = dataArray[i]['value'];
                 }
-                appendTodo(todo);
-                location.reload();
             }
         });
-        $('#todo-form').reset();
         return false;
     });
 
@@ -100,4 +119,17 @@ $(function(){
         return false;
     });
 
+    //Delete all
+    $('#delete-all').click(function()
+    {
+        $.ajax({
+            method: "DELETE",
+            url: '/todolist/delete_all',
+            success: function()
+            {
+                location.reload();
+            },
+        });
+        return false;
+    });
 });

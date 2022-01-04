@@ -1,9 +1,9 @@
 package Main;
 
+import Main.model.Todo;
+
 import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Storage {
 

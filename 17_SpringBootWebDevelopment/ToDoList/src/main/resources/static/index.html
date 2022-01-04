@@ -9,7 +9,7 @@
 <body>
     <div id="todo-form">
         <form>
-            <h2>ToDo</h2>
+            <h2>Add Todo</h2>
             <label>Name of the case:</label>
             <input type="text" name="name" value="">
             <label>Note: </label>
@@ -18,9 +18,24 @@
             <button id="save-todo">Save</button>
         </form>
     </div>
+    <div id="get-todo-form">
+        <form>
+            <h2>Edit Todo</h2>
+            <label>Case number:</label>
+            <input id="edit-number" type="text" name="number" value="" readonly>
+            <label>Name of the case:</label>
+            <input id="edit-name" type="text" name="name" value="">
+            <label>Note: </label>
+            <input id="edit-note" type="text" name="note" value="">
+            <hr>
+            <button id="edit-todo">Edit</button>
+        </form>
+    </div>
 
     <h1>To Do List</h1>
     <button id="show-add-todo-form">Add ToDo</button>
+    &nbsp;
+    <button id="delete-all">Delete All</button>
     <br><br>
     <div id="todo-list">
 

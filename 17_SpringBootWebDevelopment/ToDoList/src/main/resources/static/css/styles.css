@@ -2,7 +2,7 @@
     font-family: Arial;
 }
 
-#todo-form {
+#todo-form, #get-todo-form {
     display: none;
     align-items: center;
     justify-content: center;
@@ -31,6 +31,25 @@
 }
 
 #todo-form form > * {
+    margin-bottom: 5px;
+}
+
+#get-todo-form form {
+    background-color: white;
+    border: 1px solid #333;
+    width: 300px;
+    padding: 20px;
+}
+
+#get-todo-form h2 {
+    margin-top: 0;
+}
+
+#get-todo-form label {
+    display: block;
+}
+
+#get-todo-form form > * {
     margin-bottom: 5px;
 }
 
