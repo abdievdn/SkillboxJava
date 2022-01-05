@@ -34,7 +34,7 @@ $(function(){
         let data = $('#todo-form form').serialize();
         $.ajax({
             method: "POST",
-            url: '/todolist/',
+            url: '/todolist/add',
             data: data,
             success: function(response)
             {
@@ -58,7 +58,7 @@ $(function(){
         let todoNumber = getButton.data('number');
         $.ajax({
             method: "GET",
-            url: '/todolist/' + todoNumber,
+            url: '/todolist/get/' + todoNumber,
             success: function(response)
             {
                 $('#get-todo-form').css('display', 'flex');
@@ -85,19 +85,16 @@ $(function(){
 
     $('#edit-todo').click(function()
     {
-        let editButton = $(this);
-        let todoNumber = editButton.name('number');
+        let todoNumber = $('#edit-number').val();
+        let data = $('#get-todo-form form').serialize();
         $.ajax({
             method: "PUT",
-            url: '/todolist/' + todoNumber,
+            url: '/todolist/edit/' + todoNumber,
+            data: data,
             success: function()
             {
                 $('#get-todo-form').css('display', 'none');
-                let todo = {};
-                let dataArray = $('#get-todo-form form').serializeArray();
-                for(let i in dataArray) {
-                    todo[dataArray[i]['name']] = dataArray[i]['value'];
-                }
+                location.reload();
             }
         });
         return false;
@@ -110,11 +107,17 @@ $(function(){
         let todoNumber = deleteButton.data('number');
         $.ajax({
             method: "DELETE",
-            url: '/todolist/' + todoNumber,
-            success: function()
+            url: '/todolist/delete/' + todoNumber,
+            success: function(response)
             {
                 location.reload();
             },
+            error: function(response)
+            {
+                if(response.status == 404) {
+                    alert('Case not found!');
+                }
+            }
         });
         return false;
     });
@@ -124,7 +127,7 @@ $(function(){
     {
         $.ajax({
             method: "DELETE",
-            url: '/todolist/delete_all',
+            url: '/todolist/delete/all',
             success: function()
             {
                 location.reload();

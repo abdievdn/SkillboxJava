@@ -27,7 +27,7 @@ public class TodoController {
         return todos;
     }
 
-    @GetMapping("/todolist/{number}")
+    @GetMapping("/todolist/get/{number}")
     public ResponseEntity get(@PathVariable int number) {
         Optional<Todo> optionalTodo = todoRepository.findById(number);
         if (!optionalTodo.isPresent()) {
@@ -36,13 +36,13 @@ public class TodoController {
         return new ResponseEntity(optionalTodo.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/todolist/")
+    @PostMapping("/todolist/add")
     public int add(Todo todo) {
         Todo newTodo = todoRepository.save(todo);
         return newTodo.getNumber();
     }
 
-    @PutMapping("/todolist/{number}")
+    @PutMapping("/todolist/edit/{number}")
     public void edit(@PathVariable int number, Todo todo) {
         Optional<Todo> optionalTodo = todoRepository.findById(number);
         if (optionalTodo.isPresent()) {
@@ -50,12 +50,17 @@ public class TodoController {
         }
     }
 
-    @DeleteMapping("/todolist/{number}")
-    public void delete(@PathVariable int number) {
+    @DeleteMapping("/todolist/delete/{number}")
+    public ResponseEntity delete(@PathVariable int number) {
+        Optional<Todo> optionalTodo = todoRepository.findById(number);
+        if (!optionalTodo.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         todoRepository.deleteById(number);
+        return new ResponseEntity(optionalTodo.get(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/todolist/delete_all")
+    @DeleteMapping("/todolist/delete/all")
     public void deleteAll() {
         todoRepository.deleteAll();
     }
