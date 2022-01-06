@@ -17,15 +17,15 @@ public class TodoController {
     @Autowired
     private TodoRepository todoRepository;
 
-    @GetMapping("/todolist/")
-    public List<Todo> list() {
-        Iterable<Todo> todoIterable = todoRepository.findAll();
-        ArrayList<Todo> todos = new ArrayList<>();
-        for (Todo todo: todoIterable) {
-            todos.add(todo);
-        }
-        return todos;
-    }
+//    @GetMapping("/todolist/")
+//    public List<Todo> list() {
+//        Iterable<Todo> todoIterable = todoRepository.findAll();
+//        ArrayList<Todo> todos = new ArrayList<>();
+//        for (Todo todo: todoIterable) {
+//            todos.add(todo);
+//        }
+//        return todos;
+//    }
 
     @GetMapping("/todolist/get/{number}")
     public ResponseEntity get(@PathVariable int number) {

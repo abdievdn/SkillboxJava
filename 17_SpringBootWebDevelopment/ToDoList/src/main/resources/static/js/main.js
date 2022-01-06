@@ -1,20 +1,20 @@
 $(function(){
 
-    const appendTodo = function(data){
-        let todoCode = '<h3>' + data.number + '. ' + data.name + '</h3>' + data.note +
-            '<p><button class="delete-todo" data-number="' + data.number + '">Delete</button>&nbsp;' +
-            '<button class="get-todo" data-number="' + data.number + '">Get</button></p><hr>';
-        $('#todo-list')
-            .append('<div class="case">' + todoCode + '</div>');
-    };
-
-    //Output todolist on load page
-   $.get('/todolist/', function(response)
-   {
-       for(let i in response) {
-           appendTodo(response[i]);
-       }
-   });
+   //  const appendTodo = function(data){
+   //      let todoCode = '<h3>' + data.number + '. ' + data.name + '</h3>' + data.note +
+   //          '<p><button class="delete-todo" data-number="' + data.number + '">Delete</button>&nbsp;' +
+   //          '<button class="get-todo" data-number="' + data.number + '">Get</button></p><hr>';
+   //      $('#todo-list')
+   //          .append('<div class="case">' + todoCode + '</div>');
+   //  };
+   //
+   //  //Output todolist on load page
+   // $.get('/todolist/', function(response)
+   // {
+   //     for(let i in response) {
+   //         appendTodo(response[i]);
+   //     }
+   // });
 
     //Show adding todo form
     $('#show-add-todo-form').click(function(){
@@ -46,6 +46,7 @@ $(function(){
                     todo[dataArray[i]['name']] = dataArray[i]['value'];
                 }
                 appendTodo(todo);
+                location.reload();
             }
         });
         $('#todo-form').reset();

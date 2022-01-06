@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>To Do List</title>
@@ -32,13 +33,26 @@
         </form>
     </div>
 
-    <h1>To Do List</h1>
+    <h1>To Do List (<span th:text="${todoCount}">0</span>)</h1>
     <button id="show-add-todo-form">Add ToDo</button>
     &nbsp;
     <button id="delete-all">Delete All</button>
     <br><br>
     <div id="todo-list">
-
+        <div th:each="todo : ${todoList}">
+            <h3>
+                <span th:text="${todo.number}"></span>
+                &nbsp;
+                <span th:text="${todo.name}"></span>
+            </h3>
+            <span th:text="${todo.note}"></span>
+            <p>
+                <button class="delete-todo" th:attr="data-number=${todo.number}">Delete</button>
+                &nbsp;
+                <button class="get-todo" th:attr="data-number=${todo.number}">Get</button>
+            </p>
+            <hr>
+        </div>
     </div>
 </body>
 </html>
