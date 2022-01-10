@@ -1,4 +1,4 @@
-package Main;
+package Main.data;
 
 import Main.model.Todo;
 
