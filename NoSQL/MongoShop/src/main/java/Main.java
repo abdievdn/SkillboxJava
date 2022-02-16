@@ -1,24 +1,17 @@
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.*;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Accumulators.*;
 import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Filters.lt;
-import static java.lang.invoke.MethodHandles.lookup;
 
 public class Main {
 
@@ -71,17 +64,20 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("Statistics.");
-                    AggregateIterable<Document> aggregateIterable = shops.aggregate(
-                            List.of(Aggregates.
-                                            lookup("Items", "Items", "Name", "Statistics"),
-                                            unwind("$Statistics"),
-                                            group("$Name",
-                                                    sum("count", 1),
-                                                    sum("countLessThanHundred", new BasicDBObject("$lt", Arrays.asList("$Statistics.Price", "100"))),
-                                                    avg("avgPrice", "$Statistics.Price"),
-                                                    min("minPrice", "$Statistics.Name"),
-                                                    max("maxPrice", "$Statistics.Name"))));
-                    for(Document doc: aggregateIterable){
+                    AggregateIterable<Document> aggregateIterable =
+                            shops.aggregate(List.of(
+                                    Aggregates.lookup("Items", "Items", "Name", "Statistics"),
+                                    unwind("$Statistics"),
+                                    group("$Name",
+                                            avg("avgPrice", "$Statistics.Price"),
+                                            min("minPrice", "$Statistics.Name"),
+                                            max("maxPrice", "$Statistics.Name"),
+                                            sum("count", 1),
+                                            sum("countLessThanHundred", new Document("$cond",
+                                                    Arrays.asList(new Document("$lt",
+                                                            Arrays.asList("$Statistics.Price", 100)), 1, 0)))
+                                           )));
+                    for (Document doc : aggregateIterable) {
                         System.out.println("Shop: " + doc.get("_id") +
                                 "\n Items count: " + doc.get("count") +
                                 "\n Items count less than hundred: " + doc.get("countLessThanHundred") +
