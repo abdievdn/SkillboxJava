@@ -17,8 +17,12 @@ public class MainForm {
 
     public MainForm() {
 
+        expandButton.setVisible(false);
+
         clearButton.addActionListener(e -> {
             clearText(surnameText, nameText, patronymicText, expandText);
+            expandButton.setVisible(false);
+            collapseButton.setVisible(true);
         });
 
         collapseButton.addActionListener(e -> {
@@ -35,6 +39,8 @@ public class MainForm {
                                     .concat(" ")
                                     .concat(patronymic)
                     );
+                    collapseButton.setVisible(false);
+                    expandButton.setVisible(true);
                 } else {
                     warningMessage("Surname and Name fields must be filled!");
                 }
@@ -60,6 +66,8 @@ public class MainForm {
                 }
             }
             clearText(expandText);
+            expandButton.setVisible(false);
+            collapseButton.setVisible(true);
         });
     }
 
