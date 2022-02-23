@@ -15,7 +15,7 @@ public class Loader {
     protected static HashMap<Voter, Integer> voterCounts = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-        String fileName = "res/data-18M.xml";
+        String fileName = "res/data-1M.xml";
 
         for (int i = 0; i < 5; i++) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -32,7 +32,6 @@ public class Loader {
 
             voterCounts.clear();
             voteStationWorkTimes.clear();
-
             System.gc();
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -45,6 +44,8 @@ public class Loader {
             System.out.println("DOMParser memory usage: " + memoryUsage);
 //        printingResults();
 
+            voterCounts.clear();
+            voteStationWorkTimes.clear();
             System.gc();
         }
     }
