@@ -19,14 +19,16 @@ public class Loader {
 
 
 //        for (int i = 0; i < 5; i++) {
-//            SAXParserFactory factory = SAXParserFactory.newInstance();
-//            SAXParser parser = factory.newSAXParser();
-//            XMLHandler handler = new XMLHandler();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser parser = factory.newSAXParser();
+            XMLHandler handler = new XMLHandler();
 //
 //            long memoryUsage;
 //
 //            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-//            parser.parse(new File(fileName), handler);
+        long start = System.currentTimeMillis();
+        parser.parse(new File(fileName), handler);
+        System.out.println("Duration time: " + (System.currentTimeMillis() - start));
 //            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
 //            System.out.println("SAXParser memory usage: " + memoryUsage);
 ////        printingResults();
@@ -35,14 +37,14 @@ public class Loader {
 //            voteStationWorkTimes.clear();
 //            System.gc();
 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            DOMParser domParser = new DOMParser();
+//            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder db = dbf.newDocumentBuilder();
+//            DOMParser domParser = new DOMParser();
 
 //            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        long start = System.currentTimeMillis();
-        domParser.parseFile(fileName, db);
-        System.out.println("Duration time: " + (System.currentTimeMillis() - start));
+//        long start = System.currentTimeMillis();
+//        domParser.parseFile(fileName, db);
+//        System.out.println("Duration time: " + (System.currentTimeMillis() - start));
             DBConnection.printVoterCounts();
 //            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
 //            System.out.println("DOMParser memory usage: " + memoryUsage);
