@@ -15,39 +15,43 @@ public class Loader {
     protected static HashMap<Voter, Integer> voterCounts = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-        String fileName = "res/data-1M.xml";
+        String fileName = "res/data-18M.xml";
 
-        for (int i = 0; i < 5; i++) {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser parser = factory.newSAXParser();
-            XMLHandler handler = new XMLHandler();
 
-            long memoryUsage;
-
-            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            parser.parse(new File(fileName), handler);
-            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
-            System.out.println("SAXParser memory usage: " + memoryUsage);
-//        printingResults();
-
-            voterCounts.clear();
-            voteStationWorkTimes.clear();
-            System.gc();
+//        for (int i = 0; i < 5; i++) {
+//            SAXParserFactory factory = SAXParserFactory.newInstance();
+//            SAXParser parser = factory.newSAXParser();
+//            XMLHandler handler = new XMLHandler();
+//
+//            long memoryUsage;
+//
+//            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+//            parser.parse(new File(fileName), handler);
+//            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
+//            System.out.println("SAXParser memory usage: " + memoryUsage);
+////        printingResults();
+//
+//            voterCounts.clear();
+//            voteStationWorkTimes.clear();
+//            System.gc();
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             DOMParser domParser = new DOMParser();
 
-            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            domParser.parseFile(fileName, db);
-            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
-            System.out.println("DOMParser memory usage: " + memoryUsage);
-//        printingResults();
-
-            voterCounts.clear();
-            voteStationWorkTimes.clear();
-            System.gc();
-        }
+//            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long start = System.currentTimeMillis();
+        domParser.parseFile(fileName, db);
+        System.out.println("Duration time: " + (System.currentTimeMillis() - start));
+            DBConnection.printVoterCounts();
+//            memoryUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - memoryUsage;
+//            System.out.println("DOMParser memory usage: " + memoryUsage);
+////        printingResults();
+//
+//            voterCounts.clear();
+//            voteStationWorkTimes.clear();
+//            System.gc();
+//        }
     }
 
     private static void printingResults() {
