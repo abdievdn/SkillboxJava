@@ -8,10 +8,7 @@ import java.util.Date;
 
 public class XMLHandler extends DefaultHandler {
 
-    public static final int MAX_COUNT_FOR_MULTI_INSERT = 49999;
-
 //    private Voter voter;
-    private int count = 0;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
@@ -21,11 +18,6 @@ public class XMLHandler extends DefaultHandler {
                 String name = attributes.getValue("name");
                 String birthDay = attributes.getValue("birthDay");
                 DBConnection.countVoter(name, birthDay);
-                count += 1;
-                if (count == MAX_COUNT_FOR_MULTI_INSERT) {
-                    DBConnection.executeMultiInsert();
-                    count = 0;
-                }
             }
 
 //            if (qName.equals("voter") && voter == null) {
@@ -60,15 +52,12 @@ public class XMLHandler extends DefaultHandler {
 ////        }
 //    }
 
-
     @Override
     public void endDocument() throws SAXException {
-        if (count != 0) {
-            try {
-                DBConnection.executeMultiInsert();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            DBConnection.flush();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

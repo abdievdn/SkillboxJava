@@ -2,6 +2,7 @@ import java.sql.*;
 
 public class DBConnection {
 
+    public static final int MAX_INSERT_QUERY_LENGTH = 3_000_000;
     private static Connection connection;
 
     private static String dbName = "learn";
@@ -14,16 +15,16 @@ public class DBConnection {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + dbName +
-                        "?user=" + dbUser + "&password=" + dbPass);
+                        "jdbc:mysql://localhost:3306/" + dbName +
+                                "?user=" + dbUser + "&password=" + dbPass);
                 connection.createStatement().execute("DROP TABLE IF EXISTS voter_count");
                 connection.createStatement().execute("CREATE TABLE voter_count(" +
-                    "id INT NOT NULL AUTO_INCREMENT, " +
-                    "name TINYTEXT NOT NULL, " +
-                    "birthDate DATE NOT NULL, " +
-                    "`count` INT NOT NULL, " +
-                    "PRIMARY KEY(id), " +
-                    "UNIQUE KEY name_date(name(50), birthDate))");
+                        "id INT NOT NULL AUTO_INCREMENT, " +
+                        "name TINYTEXT NOT NULL, " +
+                        "birthDate DATE NOT NULL, " +
+                        "`count` INT NOT NULL, " +
+                        "PRIMARY KEY(id), " +
+                        "UNIQUE KEY name_date(name(50), birthDate))");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -31,19 +32,28 @@ public class DBConnection {
         return connection;
     }
 
-    public static void executeMultiInsert() throws SQLException {
-                String sql = "INSERT INTO voter_count(name, birthDate, `count`) " +
+    private static void executeMultiInsert() throws SQLException {
+        String sql = "INSERT INTO voter_count(name, birthDate, `count`) " +
                 "VALUES" + insertQuery.toString() +
                 "ON DUPLICATE KEY UPDATE `count`=`count`+1";
         DBConnection.getConnection().createStatement().execute(sql);
-        insertQuery.setLength(0);
+    }
+
+    public static void flush() throws SQLException {
+        if (insertQuery.length() != 0) {
+            executeMultiInsert();
+        }
     }
 
     public static void countVoter(String name, String birthDay) throws SQLException {
         birthDay = birthDay.replace('.', '-');
 
-            insertQuery.append((insertQuery.length() == 0 ? "" : ",") +
-                    "('" + name + "', '" + birthDay + "', 1)");
+        insertQuery.append((insertQuery.length() == 0 ? "" : ",") +
+                "('" + name + "', '" + birthDay + "', 1)");
+        if (insertQuery.length() > MAX_INSERT_QUERY_LENGTH) {
+            executeMultiInsert();
+            insertQuery.setLength(0);
+        }
 
 //        String sql = "INSERT INTO voter_count(name, birthDate, `count`) " +
 //                "VALUES('" + name + "', '" + birthDay + "', 1) " +
@@ -70,7 +80,7 @@ public class DBConnection {
         ResultSet rs = DBConnection.getConnection().createStatement().executeQuery(sql);
         while (rs.next()) {
             System.out.println("\t" + rs.getString("name") + " (" +
-                rs.getString("birthDate") + ") - " + rs.getInt("count"));
+                    rs.getString("birthDate") + ") - " + rs.getInt("count"));
         }
     }
 }

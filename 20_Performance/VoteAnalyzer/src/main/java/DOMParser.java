@@ -9,8 +9,6 @@ import java.util.Date;
 
 public class DOMParser {
 
-    public static final int MAX_COUNT_FOR_MULTI_INSERT = 49999;
-
     public void parseFile(String fileName, DocumentBuilder db) throws Exception {
         Document doc = db.parse(new File(fileName));
         findEqualVoters(doc);
@@ -20,7 +18,6 @@ public class DOMParser {
     private void findEqualVoters(Document doc) throws Exception {
         NodeList voters = doc.getElementsByTagName("voter");
         int votersCount = voters.getLength();
-        int startCount = 0;
         for (int i = 0; i < votersCount; i++) {
 
             Node node = voters.item(i);
@@ -30,16 +27,12 @@ public class DOMParser {
             String birthDay = attributes.getNamedItem("birthDay").getNodeValue();
 
             DBConnection.countVoter(name, birthDay);
-            if ((i - startCount) == MAX_COUNT_FOR_MULTI_INSERT) {
-                DBConnection.executeMultiInsert();
-                startCount = i;
-            }
 
 //            Voter voter = new Voter(name, birthDay);
 //            Integer count = Loader.voterCounts.get(voter);
 //            Loader.voterCounts.put(voter, count == null ? 1 : count + 1);
         }
-        DBConnection.executeMultiInsert();
+        DBConnection.flush();
     }
 
     private void fixWorkTimes(Document doc) throws Exception {
