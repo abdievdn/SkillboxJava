@@ -1,3 +1,7 @@
+import array_max_value.ArrayMaxValue;
+import binary_search.BinarySearch;
+import bubble_sort.BubbleSort;
+import merge_sort.MergeSort;
 import quick_sort.QuickSort;
 
 import java.util.ArrayList;
@@ -13,10 +17,15 @@ public class Main {
 //                3124, 5565, 28873, -4345, 8676, 39, -922, 540, 182, 9543, 3445, 9995, -3243, -740, -2203, 2145, 2258, 31,
 //                7204, 605, 203, -50, 8076, 300, -90, 909, 102, 5043, 9084, 908, -430, -70, -2030, 10, 200, 300, 400, 8090};
 
-        int[] arr = new int[9999];
-       for (int i = 0; i < 9999; i++) {
-           arr[i] = new Random().nextInt(100000) + 1;
-       }
+//        int[] arr = {3, -6, 2, 9 , 1, 7, 45, -1, 4};
+
+//        int[] arr = {99, 76, 45, 32, 1, 32, 24, 21, 11, 51, 9, 8, 7};
+
+        int[] arr = new int[99999];
+        for (int i = 0; i < 99999; i++) {
+            arr[i] = new Random().nextInt(100000) + 1;
+        }
+
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < 99; i++) {
             list.add(String.valueOf(i));
@@ -26,25 +35,32 @@ public class Main {
 //        System.out.println(ArrayMaxValue.getMaxValue(arr));
 
         //BinarySearch
-
-/*        list.remove(76);
-        try {
-            System.out.println(list.get(new BinarySearch(list).search("76")));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Not found!");
-             }*/
+//        try {
+//            System.out.println(list.get(new BinarySearch(list).search("76")));
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Not found!");
+//        }
 
         //BubbleSort
+//        long start = System.currentTimeMillis();
 //        BubbleSort.sort(arr);
+//        System.out.println(System.currentTimeMillis() - start);
+
 
         //QuickSort
+//        long start = System.currentTimeMillis();
+//        QuickSort.sort(arr);
+//        System.out.println(System.currentTimeMillis() - start);
+
+
+        //MergeSort
         long start = System.currentTimeMillis();
-        QuickSort.sort(arr);
+        MergeSort.mergeSort(arr);
         System.out.println(System.currentTimeMillis() - start);
+
+
         System.out.println(Arrays.toString(arr));
-
-
     }
 }
