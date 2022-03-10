@@ -2,10 +2,13 @@ import array_max_value.ArrayMaxValue;
 import binary_search.BinarySearch;
 import bubble_sort.BubbleSort;
 import merge_sort.MergeSort;
+import org.jetbrains.annotations.NotNull;
 import quick_sort.QuickSort;
+import rabin_karp.RabinKarpExtended;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Main {
@@ -56,11 +59,24 @@ public class Main {
 
 
         //MergeSort
-        long start = System.currentTimeMillis();
-        MergeSort.mergeSort(arr);
-        System.out.println(System.currentTimeMillis() - start);
+//        long start = System.currentTimeMillis();
+//        MergeSort.mergeSort(arr);
+//        System.out.println(System.currentTimeMillis() - start);
+//
+//
+//        System.out.println(Arrays.toString(arr));
 
+        String text ="Attention! Ela! World and Everybody! Hello! helLo! Hellohhhh!";
+        searchByRabinKarp(text, "Hello");
+        System.out.println();
+        searchByRabinKarp(text, "AoA");
+    }
 
-        System.out.println(Arrays.toString(arr));
+    @NotNull
+    private static List<Integer> searchByRabinKarp(String baseText, String query) {
+        RabinKarpExtended text = new RabinKarpExtended(baseText);
+        List<Integer> searchingText = text.search(query);
+        if (searchingText.isEmpty()) System.out.println("Not founded!");
+        return searchingText;
     }
 }
